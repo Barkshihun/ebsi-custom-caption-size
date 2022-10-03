@@ -93,7 +93,7 @@ const makeConfigureBtn = () => {
 };
 
 const init = (mutations) => {
-  if (mutations.length === 1 && mutations[0].target.classList.contains("mpv-duration-text")) {
+  if ((mutations.length === 1 || mutations.length === 2) && mutations[0].target.classList.contains("mpv-duration-text")) {
     setupConfirmBtn.style = "display: none;";
     makeConfigureBtn();
     dds[0].style = "display: none;";
