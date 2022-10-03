@@ -108,7 +108,6 @@ const init = (mutations) => {
       } else {
         setDt(normalDl);
       }
-      makeCustomForm(normalDl);
     });
     chrome.storage.local.get([FULLSCREEN_FONT_SIZE], (result) => {
       if (result[FULLSCREEN_FONT_SIZE]) {
@@ -118,9 +117,9 @@ const init = (mutations) => {
       } else {
         setDt(fullDl);
       }
-      makeCustomForm(fullDl);
     });
-    observer.disconnect();
+    makeCustomForm(normalDl);
+    makeCustomForm(fullDl);
   }
 };
 const observer = new MutationObserver(init);
