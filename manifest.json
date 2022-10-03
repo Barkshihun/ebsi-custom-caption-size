@@ -1,7 +1,7 @@
 {
   "name": "ebsi 자막 크기 자유 조절",
   "description": "ebsi 강의의 자막 크기를 자유롭게 조절하게 해줍니다",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "manifest_version": 3,
   "content_scripts": [
     {

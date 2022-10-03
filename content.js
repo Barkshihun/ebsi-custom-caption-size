@@ -7,6 +7,7 @@ const setupConfirmBtn = setupCaption.querySelector("#setupConfirm");
 const normalDl = cont.getElementsByTagName("dl")[0];
 const fullDl = cont.getElementsByTagName("dl")[1];
 const dds = cont.getElementsByTagName("dd");
+const mediaplayer = document.querySelector("#mediaplayer");
 const DEFAULT_NORMAL_FONT_SIZE = 15;
 const DEFAULT_FULLSCREEN_FONT_SIZE = 20;
 const NORMALSCREEN_FONT_SIZE = "normalscreenFontSize";
@@ -91,8 +92,8 @@ const makeConfigureBtn = () => {
   btnWrap.prepend(btn);
 };
 
-window.onload = () => {
-  setTimeout(() => {
+const init = (mutations) => {
+  if (mutations.length === 1 && mutations[0].target.classList.contains("mpv-duration-text")) {
     setupConfirmBtn.style = "display: none;";
     makeConfigureBtn();
     dds[0].style = "display: none;";
@@ -119,5 +120,8 @@ window.onload = () => {
       }
       makeCustomForm(fullDl);
     });
-  }, 2000);
+    observer.disconnect();
+  }
 };
+const observer = new MutationObserver(init);
+observer.observe(mediaplayer, { childList: true, subtree: true });
