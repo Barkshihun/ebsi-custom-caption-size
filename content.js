@@ -93,7 +93,7 @@ const makeConfigureBtn = () => {
 };
 
 const init = (mutations) => {
-  if ((mutations.length === 1 || mutations.length === 2) && mutations[0].target.classList.contains("mpv-duration-text")) {
+  if (mutations[0].addedNodes[0]?.nodeName === "VIDEO") {
     setupConfirmBtn.style = "display: none;";
     makeConfigureBtn();
     dds[0].style = "display: none;";
@@ -120,7 +120,10 @@ const init = (mutations) => {
     });
     makeCustomForm(normalDl);
     makeCustomForm(fullDl);
+    observer.disconnect();
   }
 };
 const observer = new MutationObserver(init);
-observer.observe(mediaplayer, { childList: true, subtree: true });
+window.onload = () => {
+  observer.observe(mediaplayer, { childList: true, subtree: true });
+};
