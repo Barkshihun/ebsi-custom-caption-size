@@ -1,6 +1,6 @@
 "use strict";
-const normalscreenFontSize = document.getElementById("normalscreenFontSize");
-const fullscreenFontSize = document.getElementById("fullscreenFontSize");
+const normalscreenFontSizeSelectElem = document.getElementById("normalscreenFontSize");
+const fullscreenFontSizeSelectElem = document.getElementById("fullscreenFontSize");
 const setupCaption = document.getElementById("setupCaption");
 const cont = setupCaption.querySelector(".cont");
 const setupConfirmBtn = setupCaption.querySelector("#setupConfirm");
@@ -8,10 +8,6 @@ const normalDl = cont.getElementsByTagName("dl")[0];
 const fullDl = cont.getElementsByTagName("dl")[1];
 const dds = cont.getElementsByTagName("dd");
 const mediaplayer = document.querySelector("#mediaplayer");
-const DEFAULT_NORMAL_FONT_SIZE = 15;
-const DEFAULT_FULLSCREEN_FONT_SIZE = 20;
-const NORMALSCREEN_FONT_SIZE = "normalscreenFontSize";
-const FULLSCREEN_FONT_SIZE = "fullscreenFontSize";
 
 const makeCustomOption = (parentNode) => {
   const customOption = document.createElement("option");
@@ -30,13 +26,13 @@ const changeBothCaptionSize = () => {
   const normalInputValue = parseInt(barkNormalInput.value);
   const fullInputValue = parseInt(barkFullInput.value);
   if (normalInputValue) {
-    chrome.storage.local.set({ [NORMALSCREEN_FONT_SIZE]: normalInputValue });
-    setCustomOption(normalscreenFontSize, normalInputValue);
+    chrome.storage.local.set({ normalscreenFontSize: normalInputValue });
+    setCustomOption(normalscreenFontSizeSelectElem, normalInputValue);
     changeDt(normalDl, normalInputValue);
   }
   if (fullInputValue) {
-    chrome.storage.local.set({ [FULLSCREEN_FONT_SIZE]: fullInputValue });
-    setCustomOption(fullscreenFontSize, fullInputValue);
+    chrome.storage.local.set({ fullscreenFontSize: fullInputValue });
+    setCustomOption(fullscreenFontSizeSelectElem, fullInputValue);
     changeDt(fullDl, fullInputValue);
   }
   barkNormalInput.value = "";
@@ -45,15 +41,7 @@ const changeBothCaptionSize = () => {
 const setDt = (dl, fontSize) => {
   const dt = dl.querySelector("dt");
   const span = document.createElement("span");
-  if (!fontSize) {
-    if (dl === normalDl) {
-      span.innerText = `현재 폰트 크기: ${DEFAULT_NORMAL_FONT_SIZE}px`;
-    } else {
-      span.innerText = `현재 폰트 크기: ${DEFAULT_FULLSCREEN_FONT_SIZE}px`;
-    }
-  } else {
-    span.innerText = `현재 폰트 크기: ${fontSize}px`;
-  }
+  span.innerText = `현재 폰트 크기: ${fontSize}px`;
   span.style = "color:gray; margin-left: 6px;";
   dt.appendChild(span);
 };
@@ -98,25 +86,14 @@ const init = (mutations) => {
     makeConfigureBtn();
     dds[0].style = "display: none;";
     dds[1].style = "display: none;";
-    makeCustomOption(normalscreenFontSize);
-    makeCustomOption(fullscreenFontSize);
-    chrome.storage.local.get([NORMALSCREEN_FONT_SIZE], (result) => {
-      if (result[NORMALSCREEN_FONT_SIZE]) {
-        setCustomOption(normalscreenFontSize, result[NORMALSCREEN_FONT_SIZE]);
-        setDt(normalDl, result[NORMALSCREEN_FONT_SIZE]);
-        setupConfirmBtn.click();
-      } else {
-        setDt(normalDl);
-      }
-    });
-    chrome.storage.local.get([FULLSCREEN_FONT_SIZE], (result) => {
-      if (result[FULLSCREEN_FONT_SIZE]) {
-        setCustomOption(fullscreenFontSize, result[FULLSCREEN_FONT_SIZE]);
-        setDt(fullDl, result[FULLSCREEN_FONT_SIZE]);
-        setupConfirmBtn.click();
-      } else {
-        setDt(fullDl);
-      }
+    makeCustomOption(normalscreenFontSizeSelectElem);
+    makeCustomOption(fullscreenFontSizeSelectElem);
+    chrome.storage.local.get({ normalscreenFontSize: 15, fullscreenFontSize: 20 }, (result) => {
+      setCustomOption(normalscreenFontSizeSelectElem, result.normalscreenFontSize);
+      setDt(normalDl, result.normalscreenFontSize);
+      setCustomOption(fullscreenFontSizeSelectElem, result.fullscreenFontSize);
+      setDt(fullDl, result.fullscreenFontSize);
+      setupConfirmBtn.click();
     });
     makeCustomForm(normalDl);
     makeCustomForm(fullDl);
